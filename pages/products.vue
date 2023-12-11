@@ -1,6 +1,10 @@
 <template>
   <div class="plp">
-    <Plp :items="items" :categories="convertCategories(categories)" />
+    <Plp
+      :items="items"
+      :categories="convertCategories(categories)"
+      :merchants="merchants"
+    />
   </div>
 </template>
 <script lang="ts" setup>
@@ -288,6 +292,74 @@ const categories = [
     priority: 0,
     mapped: true,
     parent: 85,
+  },
+]
+const merchants = [
+  {
+    id: 2661,
+    name: 'مقداد آی‌تی',
+    enabled: null,
+    description: null,
+  },
+  {
+    id: 42777,
+    name: 'جنستون',
+    enabled: null,
+    description: null,
+  },
+  {
+    id: 256077,
+    name: 'شیمالی',
+    enabled: null,
+    description: null,
+  },
+  {
+    id: 118801,
+    name: 'تکنولایف',
+    enabled: null,
+    description: null,
+  },
+  {
+    id: 263562,
+    name: 'قسطچی',
+    enabled: null,
+    description: null,
+  },
+  {
+    id: 115041,
+    name: 'ساز کالا',
+    enabled: null,
+    description: null,
+  },
+  {
+    id: 2662,
+    name: 'گوشی شاپ',
+    enabled: null,
+    description: null,
+  },
+  {
+    id: 53259,
+    name: 'کالاتیک',
+    enabled: null,
+    description: null,
+  },
+  {
+    id: 663770,
+    name: 'فرش پاتریس',
+    enabled: null,
+    description: null,
+  },
+  {
+    id: 44855,
+    name: 'دراگون شاپ',
+    enabled: null,
+    description: null,
+  },
+  {
+    id: 2687,
+    name: 'کالاوما',
+    enabled: null,
+    description: null,
   },
 ]
 

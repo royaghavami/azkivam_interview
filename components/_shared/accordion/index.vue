@@ -3,7 +3,7 @@
     <div class="accordion-panel-header" @click="toggle">
       {{ title }}
       <img
-        src="assets/images/arrow.svg"
+        src="/arrow.svg"
         class="accordion-panel-header__image"
         :class="{ expanded }"
       />

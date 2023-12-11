@@ -31,6 +31,15 @@
       :icon="imageAdd"
       :has-icon="true"
     />
+    <div class="checkbox-container">
+      <Checkbox
+        v-for="merchant in merchants"
+        :key="merchant.id"
+        v-model="localValue"
+        :label="merchant.name"
+        :val="merchant.id"
+      />
+    </div>
   </Container>
   <section>
     <div class="product-list">
@@ -46,13 +55,15 @@
   </section>
 </template>
 <script lang="ts" setup>
+import Checkbox from '@/components/_shared/input/checkbox/index.vue'
 import Card from '@/components/_shared/card/index.vue'
 import Container from '@/components/_shared/container/index.vue'
 import Accordion from '@/components/_shared/accordion/index.vue'
-import SearchInput from '@/components/_shared/input/index.vue'
+import SearchInput from '@/components/_shared/input/textfield/index.vue'
 defineProps<{
   items: any
   categories: any
+  merchants: any
 }>()
 const imageAdd = '/search.png'
 </script>
@@ -86,7 +97,24 @@ const imageAdd = '/search.png'
 .input {
   align-self: start;
   width: 8rem;
-  margin-bottom: 4px;
+  margin-bottom: 8px;
+}
+.checkbox-container {
+  overflow: auto;
+  height: 200px;
+  min-width: 100px;
+  margin: 10px 0 13px 26px;
+}
+.checkbox-container::-webkit-scrollbar {
+  width: 1px;
+}
+
+.checkbox-container::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px lightgray;
+}
+
+.checkbox-container::-webkit-scrollbar-thumb {
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);
 }
 .product-list {
   display: grid;
