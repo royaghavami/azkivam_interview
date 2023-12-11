@@ -1,5 +1,5 @@
 <template>
-  <Body>
+  <Body class="dir-rtl">
     <NuxtLayout>
       <NuxtPage />
     </NuxtLayout>
