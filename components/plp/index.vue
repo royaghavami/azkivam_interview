@@ -24,6 +24,13 @@
       </div>
     </Accordion>
     <span class="container-divider" />
+    <SearchInput
+      placeholder="جستجوی فروشگاه"
+      class="input"
+      type="text"
+      :icon="imageAdd"
+      :has-icon="true"
+    />
   </Container>
   <section>
     <div class="product-list">
@@ -42,10 +49,12 @@
 import Card from '@/components/_shared/card/index.vue'
 import Container from '@/components/_shared/container/index.vue'
 import Accordion from '@/components/_shared/accordion/index.vue'
+import SearchInput from '@/components/_shared/input/index.vue'
 defineProps<{
   items: any
   categories: any
 }>()
+const imageAdd = '/search.png'
 </script>
 <style lang="scss" scoped>
 .container {
@@ -73,6 +82,11 @@ defineProps<{
       text-decoration: none;
     }
   }
+}
+.input {
+  align-self: start;
+  width: 8rem;
+  margin-bottom: 4px;
 }
 .product-list {
   display: grid;
