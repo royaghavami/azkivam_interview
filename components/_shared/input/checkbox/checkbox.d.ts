@@ -3,24 +3,20 @@ export interface Checkbox {
     type: Boolean,
     default: false,
   },
-  disabled: {
-    type: Boolean,
-    default: false,
-  },
   htmlId: {
     type: String,
     default: undefined,
   },
   label: {
     type: String,
-    required: true,
+    // required: true,
   },
   val: {
     type: [String, Number],
-    required: true,
+    // required: true,
   },
   value: {
     type: Array,
-    required: true,
+    // required: true,
   },
 }

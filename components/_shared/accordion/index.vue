@@ -1,56 +1,38 @@
 <template>
-  <div class="accordion-panel">
-    <div class="accordion-panel-header" @click="toggle">
-      {{ title }}
-      <img
-        src="/arrow.svg"
-        class="accordion-panel-header__image"
-        :class="{ expanded }"
-      />
-    </div>
-    <div v-if="expanded" class="accordion-panel-body"><slot /></div>
-  </div>
+  <div class="accordion"><slot /></div>
 </template>
 
 <script setup>
-import { inject, onUnmounted } from 'vue'
+import { computed, provide, ref } from 'vue'
 
-defineProps({
-  title: {
-    required: true,
-    type: String,
-  },
+// Holds the id of the currently expanded panel
+const expanded = ref(null)
+
+// Use `provide` to communicate with the child panels
+provide('accordion-register', () => {
+  const id = Symbol('accordion-container')
+
+  return {
+    expanded: computed(() => expanded.value === id),
+
+    toggle() {
+      expanded.value = expanded.value === id ? null : id
+    },
+
+    unregister() {
+      if (expanded.value === id) {
+        expanded.value = null
+      }
+    },
+  }
 })
-
-const register = inject('accordion-register')
-
-const { expanded, toggle, unregister } = register()
-
-onUnmounted(unregister)
 </script>
 
-<style scoped lang="scss">
-.accordion-panel {
+<style lang="scss" scoped>
+@import 'assets/styles/colors';
+.accordion {
   display: flex;
   flex-direction: column;
-  &-header {
-    display: flex;
-    flex-direction: row;
-    cursor: pointer;
-    &__image {
-      position: relative;
-      width: 10px;
-      margin-right: 10px;
-    }
-  }
-  &-body {
-    flex: auto;
-    overflow: auto;
-  }
-}
-
-.expanded {
-  transform: rotate(-180deg);
-  animation: accordion-is-inactive 200ms linear forwards;
+  width: 100%;
 }
 </style>

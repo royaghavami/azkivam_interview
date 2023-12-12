@@ -1,6 +1,6 @@
-body {
-  font-family: 'Source Sans Pro', sans-serif;
-}
+@import "colors";
+@import "variables";
+@import "fonts";
 .dir {
   &-rtl {
     direction: rtl;

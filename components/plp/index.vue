@@ -5,45 +5,47 @@
       <br />
       دسته بندی
     </h2>
-    <Accordion
-      v-for="(category, index) in categories"
-      :key="index"
-      :title="category.name"
-      class="accordion"
-    >
-      <div
-        v-for="(child, i) in category.children"
-        :key="i"
-        class="accordion-wrapper"
+    <AccordionContainer>
+      <Accordion
+        v-for="(category, index) in categories"
+        :key="index"
+        :title="category.name"
+        class="accordion"
       >
-        <NuxtLink
-          :to="`/products/${child.id}/${child.slug}`"
-          class="accordion-wrapper__child"
-          >{{ child.name }}</NuxtLink
+        <div
+          v-for="(child, i) in category.children"
+          :key="i"
+          class="accordion-wrapper"
         >
-      </div>
-    </Accordion>
+          <NuxtLink
+            :to="`/products/${child.id}/${child.slug}`"
+            class="accordion-wrapper__child"
+          >{{ child.name }}</NuxtLink
+          >
+        </div>
+      </Accordion>
+    </AccordionContainer>
     <span class="container-divider" />
-    <SearchInput
-      placeholder="جستجوی فروشگاه"
-      class="input"
-      type="text"
-      :icon="imageAdd"
-      :has-icon="true"
-    />
+    <div class="search-input">
+      <SearchInput
+        placeholder="جستجوی فروشگاه"
+        type="text"
+        :icon="imageAdd"
+        :has-icon="true"
+      />
+    </div>
     <div class="checkbox-container">
       <Checkbox
         v-for="merchant in merchants"
         :key="merchant.id"
-        v-model="localValue"
         :label="merchant.name"
-        :val="merchant.id"
+        :html-id="merchant.id"
       />
     </div>
   </Container>
   <section>
     <div class="product-list">
-      <div v-for="item in items" :key="item.id" class="e">
+      <div v-for="item in items" :key="item.id" class="product-list__item">
         <Card
           :id="item.id"
           :name="item.name"
@@ -58,7 +60,8 @@
 import Checkbox from '@/components/_shared/input/checkbox/index.vue'
 import Card from '@/components/_shared/card/index.vue'
 import Container from '@/components/_shared/container/index.vue'
-import Accordion from '@/components/_shared/accordion/index.vue'
+import AccordionContainer from '@/components/_shared/accordion/index.vue'
+import Accordion from '@/components/_shared/accordion/item.vue'
 import SearchInput from '@/components/_shared/input/textfield/index.vue'
 defineProps<{
   items: any
@@ -68,49 +71,54 @@ defineProps<{
 const imageAdd = '/search.png'
 </script>
 <style lang="scss" scoped>
+@import 'assets/styles/colors';
+@import 'assets/styles/variables';
 .container {
   padding: 0 17px 0 0;
   border-radius: 10px;
   height: auto;
+  border: 1px solid $secondary;
   &-title {
-    font-weight: bold;
-    font-size: 16px;
+    font-weight: 300;
+    font-size: $header-font-size;
     line-height: 3;
   }
   &-divider {
+    display: block;
     height: 1px;
-    margin: 0 0 16px 33px;
-    border-left: 12rem solid lightgray;
+    margin: 0px 0 30px 16px;
+    border-left: 18rem solid $light-gray;
   }
 }
 .accordion {
-  color: black;
+  color: $black;
   margin-bottom: 18px;
   &-wrapper {
     margin: 12px 24px;
     &__child {
-      color: gray;
+      color: $dark-gray;
       text-decoration: none;
     }
   }
 }
-.input {
+.search-input {
   align-self: start;
-  width: 8rem;
+  width: 150px;
   margin-bottom: 8px;
+  border-radius: $primary-radius;
 }
 .checkbox-container {
   overflow: auto;
   height: 200px;
   min-width: 100px;
-  margin: 10px 0 13px 26px;
+  margin: 10px 0 13px 9px;
 }
 .checkbox-container::-webkit-scrollbar {
   width: 1px;
 }
 
 .checkbox-container::-webkit-scrollbar-track {
-  -webkit-box-shadow: inset 0 0 6px lightgray;
+  -webkit-box-shadow: inset 0 0 6px $light-gray;
 }
 
 .checkbox-container::-webkit-scrollbar-thumb {
@@ -120,17 +128,19 @@ const imageAdd = '/search.png'
   display: grid;
   grid-gap: 0px 0px;
   grid-template-columns: repeat(4, 2fr);
-  border: 1px solid lightgray;
+  align-items: stretch;
+  border: 1px solid $light-gray;
   border-radius: 10px;
-}
-.e {
-  &:nth-of-type(4n + 1),
-  &:nth-of-type(4n + 2),
-  &:nth-of-type(4n + 3) {
-    border-left: 1px solid lightgray;
-  }
-  &:not(:nth-last-child(-n + 4)) {
-    border-bottom: 1px solid lightgray;
+  &__item {
+    display: flex;
+    &:nth-of-type(4n + 1),
+    &:nth-of-type(4n + 2),
+    &:nth-of-type(4n + 3) {
+      border-left: 1px solid $light-gray;
+    }
+    &:not(:nth-last-child(-n + 4)) {
+      border-bottom: 1px solid $light-gray;
+    }
   }
 }
 </style>

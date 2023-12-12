@@ -8,7 +8,7 @@
       <span class="card-content__description"
         >شروع قیمت از
         <br />
-        <span class="bold">{{ price }} تومان</span>
+        <span class="bold">{{ addPriceSeparator(toToman(price)) }} تومان</span>
       </span>
     </div>
   </article>
@@ -16,12 +16,24 @@
 <script lang="ts" setup>
 import type { Card } from './card'
 defineProps<Card>()
+const addPriceSeparator = (price: string | number): string => {
+  return `${price}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+}
+
+const toToman = (price: string | number): number => {
+  return (Number(price) / 10) >> 0
+}
 </script>
 <style lang="scss" scoped>
+@import 'assets/styles/colors';
+@import 'assets/styles/variables';
 .card {
   position: relative;
+  display: flex;
+  flex-direction: column;
   width: 200px;
   padding: 15px;
+  align-items: stretch;
   &-media {
     position: relative;
     padding-bottom: 70%;
@@ -34,19 +46,24 @@ defineProps<Card>()
     }
   }
   &-content {
+    display: flex;
+    flex-direction: column;
+    align-self: flex-end;
+    flex-grow: 1;
+    justify-content: space-between;
     &__title {
-      font-weight: 700;
-      font-size: 18px;
+      font-weight: 300;
+      font-size: $header-font-size;
     }
     &__description {
-      font-weight: 200;
-      font-size: 13px;
-      color: gray;
+      font-weight: 300;
+      font-size: $primary-size;
+      color: $dark-gray;
       line-height: 2;
       span.bold {
-        color: black;
+        color: $black;
         font-weight: bold;
-        font-size: 15px;
+        font-size: $primary-size;
       }
     }
   }

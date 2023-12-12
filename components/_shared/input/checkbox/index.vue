@@ -22,7 +22,6 @@ const props = defineProps<Checkbox>()
 const inputAttrs = computed(function () {
   return {
     checked: props.checked,
-    disabled: props.disabled,
     id: props.htmlId,
     type: 'checkbox',
   }
@@ -38,6 +37,8 @@ const localValue = computed({
 </script>
 
 <style lang="scss" scoped>
+@import 'assets/styles/colors';
+@import 'assets/styles/variables';
 .j-checkbox {
   display: block;
   cursor: pointer;
@@ -51,14 +52,14 @@ const localValue = computed({
       width: 20px;
       height: 20px;
       margin-left: 10px;
-      background-color: white;
-      border: 1px solid lightgray;
+      background-color: $white;
+      border: 1px solid $light-gray;
       border-radius: 5px;
     }
     &__text {
-      color: black;
+      color: $black;
       font-weight: 300;
-      font-size: 16px;
+      font-size: $base-size;
     }
   }
   &__input {
@@ -67,7 +68,7 @@ const localValue = computed({
       .j-checkbox-box {
         &__checkbox {
           position: relative;
-          background-color: black;
+          background-color: $black;
           &::before {
             top: 4px;
             left: 4px;
@@ -76,8 +77,8 @@ const localValue = computed({
             content: ' ';
             position: absolute;
             transform: rotate(-45deg);
-            border-left: 2px solid white;
-            border-bottom: 2px solid white;
+            border-left: 2px solid $white;
+            border-bottom: 2px solid $white;
             border-bottom-left-radius: 1px;
           }
         }

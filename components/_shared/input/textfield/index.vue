@@ -1,25 +1,23 @@
 <template>
-  <div class="input__wrapper">
-    <label :class="['input']">
-      <span
-        v-if="hasIcon"
-        class="input__icon"
-        @click.prevent="$emit('click:icon')"
-      >
-        <img :src="icon" width="24" height="24" />
-      </span>
-      <input
-        :class="[
-          'input__field',
-          {
-            'input__field--icon': hasIcon,
-          },
-        ]"
-        :value="value"
-        v-bind="$attrs"
-      />
-    </label>
-  </div>
+  <label :class="['input']">
+    <span
+      v-if="hasIcon"
+      class="input__icon"
+      @click.prevent="$emit('click:icon')"
+    >
+      <img :src="icon" width="24" height="24" />
+    </span>
+    <input
+      :class="[
+        'input__field',
+        {
+          'input__field--icon': hasIcon,
+        },
+      ]"
+      :value="value"
+      v-bind="$attrs"
+    />
+  </label>
 </template>
 
 <script setup lang="ts">
@@ -37,17 +35,19 @@ defineProps<Input>()
 </script>
 
 <style lang="scss" scoped>
+@import 'assets/styles/colors';
 .input {
   width: 100%;
   display: block;
   position: relative;
-  border-radius: 10px;
+  border-radius: inherit;
   &__field {
     width: 100%;
     display: block;
     font-size: 16px;
-    padding: 8px 42px;
-    border: 1px solid lightgray;
+    padding: 8px 33px;
+    border: 1px solid $light-gray;
+    border-radius: inherit;
     &:focus {
       outline: none;
     }
@@ -61,15 +61,12 @@ defineProps<Input>()
   &__icon {
     position: absolute;
     top: 50%;
-    padding: 8px 9px;
+    padding: 8px 8px;
     transform: translateY(-50%);
     z-index: 5;
     img {
       pointer-events: none;
     }
-  }
-  &__wrapper {
-    width: 100%;
   }
 }
 </style>
