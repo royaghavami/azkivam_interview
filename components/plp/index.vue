@@ -20,7 +20,7 @@
           <NuxtLink
             :to="`/products/${child.id}/${child.slug}`"
             class="accordion-wrapper__child"
-          >{{ child.name }}</NuxtLink
+            >{{ child.name }}</NuxtLink
           >
         </div>
       </Accordion>
@@ -54,6 +54,9 @@
         />
       </div>
     </div>
+    <ClientOnly>
+      <Observer @intersect="emits('update:intersect')" />
+    </ClientOnly>
   </section>
 </template>
 <script lang="ts" setup>
@@ -63,10 +66,16 @@ import Container from '@/components/_shared/container/index.vue'
 import AccordionContainer from '@/components/_shared/accordion/index.vue'
 import Accordion from '@/components/_shared/accordion/item.vue'
 import SearchInput from '@/components/_shared/input/textfield/index.vue'
+import Observer from '@/components/plp/observer.vue'
+
 defineProps<{
   items: any
   categories: any
   merchants: any
+}>()
+
+const emits = defineEmits<{
+  (emitName: 'update:intersect'): void
 }>()
 const imageAdd = '/search.png'
 </script>
