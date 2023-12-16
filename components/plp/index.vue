@@ -130,7 +130,7 @@ const imageAdd = '/search.png'
       &:nth-of-type(4n + 3) {
         border-left: 1px solid $light-gray;
       }
-      &:not(:nth-last-child(-n + 4)) {
+      &:not(:nth-last-child(-n + 2)) {
         border-bottom: 1px solid $light-gray;
       }
     }

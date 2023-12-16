@@ -48,9 +48,9 @@ const toToman = (price: string | number): number => {
   &-content {
     display: flex;
     flex-direction: column;
-    align-self: flex-end;
     flex-grow: 1;
     justify-content: space-between;
+    align-self: flex-start;
     &__title {
       font-weight: 300;
       font-size: $header-font-size;

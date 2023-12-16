@@ -5,7 +5,11 @@
         :items="products?.data"
         :categories="convertCategories"
         :merchants="merchants?.data"
-        @update:intersect="handleScroll"
+        @update:intersect="
+          () => {
+            page = page + 1
+          }
+        "
       />
     </div>
   </main>
@@ -13,19 +17,14 @@
 <script lang="ts" setup>
 import { useRoute } from 'vue-router'
 import Plp from '../components/plp/index.vue'
+import { useCategoryListQuery } from '@/services/use-category-list.query'
+import { useMerchantsListQuery } from '@/services/use-merchants-list.query'
+import { useProductListQuery } from '@/services/use-product-list.query'
 
 definePageMeta({
   path: '/products',
   alias: ['/products/:id/:slug'],
 })
-
-const { data: categories } = await useAsyncData('categories', () =>
-  $fetch('https://interview-api.azkiloan.com/api/v1/categories'),
-)
-
-const { data: merchants } = await useAsyncData('merchants', () =>
-  $fetch('https://interview-api.azkiloan.com/api/v1/merchants'),
-)
 
 const route = useRoute()
 
@@ -40,48 +39,24 @@ const api = computed(() =>
     : `https://interview-api.azkiloan.com/api/v1/products/${route.params.id}`,
 )
 
-const { data: products } = await useAsyncData(
-  'products',
-  async (app) => {
-    const { data, totalItems } = await $fetch(api.value, {
-      method: 'POST',
-      params: {
-        size: 10,
-        page: page.value,
-      },
-    })
-    const previousData = app?._asyncData?.products?.data.value?.data || []
-    if (page.value === 1 && previousData.length !== 0) {
-      return {
-        data: [...data],
-        totalItems,
-      }
-    } else
-      return {
-        data: [...previousData, ...data],
-        totalItems,
-      }
-  },
-  {
-    watch: [page],
-  },
-)
+const { data: categories } = await useCategoryListQuery()
 
-const handleScroll = () => {
-  page.value = page.value + 1
-}
+const { data: merchants } = await useMerchantsListQuery()
 
-const convertCategories = computed(() =>
-  categories.value.data.reduce((acc, current) => {
-    if (!current.mapped) {
-      const children = categories.value.data.filter(
-        (item) => item.parent === current.id,
-      )
-      current.children = children
-      acc.push(current)
-    }
-    return acc
-  }, []),
+const { data: products } = await useProductListQuery(page, api)
+
+const convertCategories = computed(
+  () =>
+    categories.value?.data.reduce((acc, current) => {
+      if (!current.mapped) {
+        const children = categories.value?.data.filter(
+          (item) => item.parent === current.id,
+        )
+        current.children = children
+        acc.push(current)
+      }
+      return acc
+    }, []),
 )
 </script>
 <style scoped lang="scss">
