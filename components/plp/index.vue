@@ -1,52 +1,53 @@
 <template>
-  <Container class="container">
-    <h2 class="container-title">
-      فیلتر ها
-      <br />
-      دسته بندی
-    </h2>
-    <AccordionContainer>
-      <Accordion
-        v-for="(category, index) in categories"
-        :key="index"
-        :title="category.name"
-        :link="`/products/${category.id}/${category.slug}`"
-        class="accordion"
-      >
-        <div
-          v-for="(child, i) in category.children"
-          :key="i"
-          class="accordion-wrapper"
+  <div class="plp-content">
+    <Container class="plp-content-sidebar">
+      <h2 class="plp-content-sidebar__title">
+        فیلتر ها
+        <br />
+        دسته بندی
+      </h2>
+      <AccordionContainer>
+        <Accordion
+          v-for="(category, index) in categories"
+          :key="index"
+          :title="category.name"
+          :link="`/products/${category.id}/${category.slug}`"
+          class="accordion"
         >
-          <NuxtLink
-            :to="`/products/${child.id}/${child.slug}`"
-            class="accordion-wrapper__child"
-            >{{ child.name }}</NuxtLink
+          <div
+            v-for="(child, i) in category.children"
+            :key="i"
+            class="accordion-wrapper"
           >
-        </div>
-      </Accordion>
-    </AccordionContainer>
-    <span class="container-divider" />
-    <div class="search-input">
-      <SearchInput
-        placeholder="جستجوی فروشگاه"
-        type="text"
-        :icon="imageAdd"
-        :has-icon="true"
-      />
-    </div>
-    <div class="checkbox-container">
-      <Checkbox
-        v-for="merchant in merchants"
-        :key="merchant.id"
-        :label="merchant.name"
-        :html-id="merchant.id"
-      />
-    </div>
-  </Container>
-  <section>
-    <div class="product-list">
-      <div v-for="item in items" :key="item.id" class="product-list__item">
+            <NuxtLink
+              :to="`/products/${child.id}/${child.slug}`"
+              class="accordion-wrapper__child"
+            >
+              {{ child.name }}
+            </NuxtLink>
+          </div>
+        </Accordion>
+      </AccordionContainer>
+      <span class="plp-content-sidebar__divider" />
+      <div class="search-input">
+        <SearchInput
+          placeholder="جستجوی فروشگاه"
+          type="text"
+          :icon="imageAdd"
+          :has-icon="true"
+        />
+      </div>
+      <div class="checkbox-container">
+        <Checkbox
+          v-for="merchant in merchants"
+          :key="merchant.id"
+          :label="merchant.name"
+          :html-id="merchant.id"
+        />
+      </div>
+    </Container>
+    <section class="plp-content__main">
+      <div v-for="item in items" :key="item.id" class="item">
         <Card
           :id="item.id"
           :name="item.name"
@@ -54,11 +55,11 @@
           :price="item.minPrice"
         />
       </div>
-    </div>
-    <ClientOnly>
-      <Observer @intersect="emits('update:intersect')" />
-    </ClientOnly>
-  </section>
+      <ClientOnly>
+        <Observer @intersect="emits('update:intersect')" />
+      </ClientOnly>
+    </section>
+  </div>
 </template>
 <script lang="ts" setup>
 import Checkbox from '@/components/_shared/input/checkbox/index.vue'
@@ -83,21 +84,56 @@ const imageAdd = '/search.png'
 <style lang="scss" scoped>
 @import 'assets/styles/colors';
 @import 'assets/styles/variables';
-.container {
-  padding: 0 17px 0 0;
-  border-radius: 10px;
-  height: auto;
-  border: 1px solid $secondary;
-  &-title {
-    font-weight: 300;
-    font-size: $header-font-size;
-    line-height: 3;
+.plp-content {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  &-sidebar {
+    padding: 0 17px 0 0;
+    border-radius: 10px;
+    border: 1px solid $secondary;
+    top: 0;
+    z-index: 500;
+    width: 315px;
+    position: sticky;
+    &__divider {
+      display: block;
+      height: 1px;
+      margin: 0px 0 30px 23px;
+      border-left: 18rem solid $light-gray;
+    }
+    &__title {
+      font-weight: 300;
+      font-size: $header-font-size;
+      line-height: 3;
+    }
+    .search-input {
+      align-self: start;
+      width: 150px;
+      margin-bottom: 8px;
+      border-radius: $primary-radius;
+    }
   }
-  &-divider {
-    display: block;
-    height: 1px;
-    margin: 0px 0 30px 16px;
-    border-left: 18rem solid $light-gray;
+  &__main {
+    display: grid;
+    grid-gap: 0px 0;
+    grid-template-columns: repeat(4, 2fr);
+    align-items: stretch;
+    border: 1px solid $light-gray;
+    border-radius: 10px;
+    margin: 0 0 0 22px;
+    .item {
+      display: flex;
+      &:nth-of-type(4n + 1),
+      &:nth-of-type(4n + 2),
+      &:nth-of-type(4n + 3) {
+        border-left: 1px solid $light-gray;
+      }
+      &:not(:nth-last-child(-n + 4)) {
+        border-bottom: 1px solid $light-gray;
+      }
+    }
   }
 }
 .accordion {
@@ -110,12 +146,6 @@ const imageAdd = '/search.png'
       text-decoration: none;
     }
   }
-}
-.search-input {
-  align-self: start;
-  width: 150px;
-  margin-bottom: 8px;
-  border-radius: $primary-radius;
 }
 .checkbox-container {
   overflow: auto;
@@ -133,24 +163,5 @@ const imageAdd = '/search.png'
 
 .checkbox-container::-webkit-scrollbar-thumb {
   -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);
-}
-.product-list {
-  display: grid;
-  grid-gap: 0px 0px;
-  grid-template-columns: repeat(4, 2fr);
-  align-items: stretch;
-  border: 1px solid $light-gray;
-  border-radius: 10px;
-  &__item {
-    display: flex;
-    &:nth-of-type(4n + 1),
-    &:nth-of-type(4n + 2),
-    &:nth-of-type(4n + 3) {
-      border-left: 1px solid $light-gray;
-    }
-    &:not(:nth-last-child(-n + 4)) {
-      border-bottom: 1px solid $light-gray;
-    }
-  }
 }
 </style>

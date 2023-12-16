@@ -1,12 +1,14 @@
 <template>
-  <div class="plp">
-    <Plp
-      :items="products?.data"
-      :categories="convertCategories"
-      :merchants="merchants?.data"
-      @update:intersect="handleScroll"
-    />
-  </div>
+  <main class="plp">
+    <div class="plp__container">
+      <Plp
+        :items="products?.data"
+        :categories="convertCategories"
+        :merchants="merchants?.data"
+        @update:intersect="handleScroll"
+      />
+    </div>
+  </main>
 </template>
 <script lang="ts" setup>
 import { useRoute } from 'vue-router'
@@ -83,13 +85,15 @@ const convertCategories = computed(() =>
 )
 </script>
 <style scoped lang="scss">
+@import 'assets/styles/variables';
 .plp {
-  position: relative;
-  display: flex;
-  flex-direction: row;
-  padding: 3rem;
-  margin-top: 20px;
-  align-items: start;
-  justify-content: space-evenly;
+  width: 100%;
+  flex: 1 1 0;
+  min-width: 0;
+  &__container {
+    margin: 0 auto;
+    padding: $container-padding;
+    max-width: $container-size;
+  }
 }
 </style>
