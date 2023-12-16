@@ -1,7 +1,7 @@
 <template>
   <div class="accordion-panel">
     <div class="accordion-panel-header" @click="toggle">
-      {{ title }}
+      <NuxtLink class="accordion-panel__title" :to="link">{{ title }}</NuxtLink>
       <img
         src="/arrow.svg"
         class="accordion-panel-header__image"
@@ -12,15 +12,13 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { inject, onUnmounted } from 'vue'
 
-defineProps({
-  title: {
-    required: true,
-    type: String,
-  },
-})
+defineProps<{
+  title: string
+  link: string
+}>()
 
 const register = inject('accordion-register')
 
@@ -30,9 +28,14 @@ onUnmounted(unregister)
 </script>
 
 <style scoped lang="scss">
+@import 'assets/styles/colors';
 .accordion-panel {
   display: flex;
   flex-direction: column;
+  &__title {
+    text-decoration: none;
+    color: $black;
+  }
   &-header {
     display: flex;
     flex-direction: row;

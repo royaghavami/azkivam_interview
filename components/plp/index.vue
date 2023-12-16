@@ -10,6 +10,7 @@
         v-for="(category, index) in categories"
         :key="index"
         :title="category.name"
+        :link="`/products/${category.id}/${category.slug}`"
         class="accordion"
       >
         <div

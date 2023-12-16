@@ -9,7 +9,9 @@
   </div>
 </template>
 <script lang="ts" setup>
+import { useRoute } from 'vue-router'
 import Plp from '../components/plp/index.vue'
+
 definePageMeta({
   path: '/products',
   alias: ['/products/:id/:slug'],
@@ -23,25 +25,40 @@ const { data: merchants } = await useAsyncData('merchants', () =>
   $fetch('https://interview-api.azkiloan.com/api/v1/merchants'),
 )
 
+const route = useRoute()
+
 const page = ref(1)
+
+watch(route, () => {
+  page.value = 1
+})
+const api = computed(() =>
+  Object.keys(route.params).length === 0
+    ? 'https://interview-api.azkiloan.com/api/v1/products'
+    : `https://interview-api.azkiloan.com/api/v1/products/${route.params.id}`,
+)
+
 const { data: products } = await useAsyncData(
   'products',
   async (app) => {
-    const { data, totalItems } = await $fetch(
-      'https://interview-api.azkiloan.com/api/v1/products',
-      {
-        method: 'POST',
-        params: {
-          size: 10,
-          page: page.value,
-        },
+    const { data, totalItems } = await $fetch(api.value, {
+      method: 'POST',
+      params: {
+        size: 10,
+        page: page.value,
       },
-    )
+    })
     const previousData = app?._asyncData?.products?.data.value?.data || []
-    return {
-      data: [...previousData, ...data],
-      totalItems,
-    }
+    if (page.value === 1 && previousData.length !== 0) {
+      return {
+        data: [...data],
+        totalItems,
+      }
+    } else
+      return {
+        data: [...previousData, ...data],
+        totalItems,
+      }
   },
   {
     watch: [page],
