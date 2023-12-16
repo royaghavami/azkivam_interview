@@ -108,7 +108,7 @@ const imageAdd = '/search.png'
     }
     .search-input {
       align-self: start;
-      width: 150px;
+      width: 226px;
       margin-bottom: 8px;
       border-radius: $primary-radius;
     }
@@ -149,7 +149,7 @@ const imageAdd = '/search.png'
   overflow: auto;
   height: 200px;
   min-width: 100px;
-  margin: 10px 0 13px 9px;
+  margin: 10px 0 13px 20px;
 }
 .checkbox-container::-webkit-scrollbar {
   width: 1px;
