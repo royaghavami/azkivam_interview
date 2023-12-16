@@ -11,21 +11,19 @@
           v-for="(category, index) in categories"
           :key="index"
           :title="category.name"
+          :has-children="true"
           :link="`/products/${category.id}/${category.slug}`"
           class="accordion"
         >
-          <div
-            v-for="(child, i) in category.children"
-            :key="i"
-            class="accordion-wrapper"
-          >
-            <NuxtLink
-              :to="`/products/${child.id}/${child.slug}`"
+          <template #children>
+            <Accordion
+              v-for="(child, i) in category.children"
+              :key="i"
+              :title="child.name"
+              :link="`/products/${child.id}/${child.slug}`"
               class="accordion-wrapper__child"
-            >
-              {{ child.name }}
-            </NuxtLink>
-          </div>
+            />
+          </template>
         </Accordion>
       </AccordionContainer>
       <span class="plp-content-sidebar__divider" />
@@ -65,10 +63,10 @@
 import Checkbox from '@/components/_shared/input/checkbox/index.vue'
 import Card from '@/components/_shared/card/index.vue'
 import Container from '@/components/_shared/container/index.vue'
-import AccordionContainer from '@/components/_shared/accordion/index.vue'
-import Accordion from '@/components/_shared/accordion/item.vue'
 import SearchInput from '@/components/_shared/input/textfield/index.vue'
 import Observer from '@/components/plp/observer.vue'
+import AccordionContainer from '@/components/_shared/accordion/index.vue'
+import Accordion from '@/components/_shared/accordion/item.vue'
 
 defineProps<{
   items: any

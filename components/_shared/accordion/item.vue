@@ -1,32 +1,35 @@
 <template>
-  <div class="accordion-panel">
+  <div>
     <div class="accordion-panel-header" @click="toggle">
-      <NuxtLink class="accordion-panel__title" :to="link">{{ title }}</NuxtLink>
+      <NuxtLink
+        :class="{ isChild: !hasChildren }"
+        class="accordion-panel__title"
+        :to="link"
+        >{{ title }}</NuxtLink
+      >
       <img
+        v-if="hasChildren"
         src="/arrow.svg"
         class="accordion-panel-header__image"
-        :class="{ expanded }"
+        :class="{ isOpen }"
       />
     </div>
-    <div v-if="expanded" class="accordion-panel-body"><slot /></div>
+    <div v-if="isOpen && hasChildren" class="accordion-panel-body">
+      <slot name="children" />
+    </div>
   </div>
 </template>
-
 <script setup lang="ts">
-import { inject, onUnmounted } from 'vue'
+import { useAccordion } from '@/composables/use-accordion'
 
 defineProps<{
   title: string
   link: string
+  hasChildren: boolean
 }>()
 
-const register = inject('accordion-register')
-
-const { expanded, toggle, unregister } = register()
-
-onUnmounted(unregister)
+const { toggle, isOpen } = useAccordion()
 </script>
-
 <style scoped lang="scss">
 @import 'assets/styles/colors';
 .accordion-panel {
@@ -51,8 +54,12 @@ onUnmounted(unregister)
     overflow: auto;
   }
 }
-
-.expanded {
+.isChild {
+  text-decoration: none;
+  color: $light-gray;
+  margin: 13px 11px 0 5px;
+}
+.isOpen {
   transform: rotate(-180deg);
   animation: accordion-is-inactive 200ms linear forwards;
 }
