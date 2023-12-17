@@ -1,23 +1,24 @@
 <template>
-  <label :class="['input']">
-    <span
-      v-if="hasIcon"
-      class="input__icon"
-      @click.prevent="$emit('click:icon')"
-    >
-      <img :src="icon" width="24" height="24" />
-    </span>
-    <input
-      :class="[
-        'input__field',
-        {
-          'input__field--icon': hasIcon,
-        },
-      ]"
-      :value="value"
-      v-bind="$attrs"
-    />
-  </label>
+<!--  <label class="input">-->
+<!--    <span-->
+<!--      v-if="hasIcon"-->
+<!--      class="input__icon"-->
+<!--      @click.prevent="$emit('click:icon')"-->
+<!--    >-->
+<!--      <img :src="icon" width="24" height="24" />-->
+<!--    </span>-->
+<!--    <input-->
+<!--      :class="[-->
+<!--        'input__field',-->
+<!--        {-->
+<!--          'input__field&#45;&#45;icon': hasIcon,-->
+<!--        },-->
+<!--      ]"-->
+<!--      :value="value"-->
+<!--      v-bind="$attrs"-->
+<!--    />-->
+<!--  </label>-->
+  <input class="input" :value="value" />
 </template>
 
 <script setup lang="ts">
@@ -32,26 +33,10 @@ defineProps<{
 @import 'assets/styles/colors';
 .input {
   width: 100%;
-  display: block;
-  position: relative;
+  height: 100%;
   border-radius: inherit;
-  &__field {
-    width: 100%;
-    display: block;
-    font-size: 16px;
-    padding: 8px 33px;
-    border: 1px solid $light-gray;
-    border-radius: inherit;
-    &:focus {
-      outline: none;
-    }
-    &::placeholder {
-      direction: rtl;
-      font-weight: 300;
-      opacity: 1;
-      text-align: right;
-    }
-  }
+  text-decoration: none;
+  border: none;
   &__icon {
     position: absolute;
     top: 50%;

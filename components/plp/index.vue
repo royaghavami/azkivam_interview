@@ -1,13 +1,10 @@
 <template>
-  <main class="plp">
-    <div class="plp__container">
-      <div class="plp-content">
-        <Container class="plp-content-sidebar">
-          <h2 class="plp-content-sidebar__title">
-            فیلتر ها
-            <br />
-            دسته بندی
-          </h2>
+  <button class="filter-btn" @click="toggle">+</button>
+  <div class="plp-content">
+    <Container :class="{ collapse: show }" class="plp-content-sidebar">
+      <h2 class="plp-content-sidebar__title">فیلتر ها</h2>
+      <FilterSection title="دسته بندی">
+        <template #body>
           <AccordionContainer>
             <Accordion
               v-for="(category, index) in categories"
@@ -29,7 +26,11 @@
               </template>
             </Accordion>
           </AccordionContainer>
-          <span class="plp-content-sidebar__divider" />
+        </template>
+      </FilterSection>
+      <!--      <span class="plp-content-sidebar__divider" />-->
+      <FilterSection>
+        <template #head>
           <div class="search-input">
             <SearchInput
               placeholder="جستجوی فروشگاه"
@@ -39,6 +40,8 @@
               :value="''"
             />
           </div>
+        </template>
+        <template #body>
           <div class="checkbox-container">
             <Checkbox
               v-for="merchant in merchants"
@@ -49,23 +52,23 @@
               @click="emits('update:merchant-filter', merchant.id)"
             />
           </div>
-        </Container>
-        <section class="plp-content__main">
-          <div v-for="item in items" :key="item.id" class="item">
-            <Card
-              :id="item.id"
-              :name="item.name"
-              :image-url="item.imageUrl"
-              :price="item.minPrice"
-            />
-          </div>
-          <ClientOnly>
-            <Observer @intersect="emits('update:intersect')" />
-          </ClientOnly>
-        </section>
+        </template>
+      </FilterSection>
+    </Container>
+    <div class="plp-content__main">
+      <div v-for="item in items" :key="item.id" class="item">
+        <Card
+          :id="item.id"
+          :name="item.name"
+          :image-url="item.imageUrl"
+          :price="item.minPrice"
+        />
       </div>
+      <ClientOnly>
+        <Observer @intersect="emits('update:intersect')" />
+      </ClientOnly>
     </div>
-  </main>
+  </div>
 </template>
 <script lang="ts" setup>
 import type { PlpProps } from './plp'
@@ -76,6 +79,8 @@ import SearchInput from '@/components/_shared/input/textfield/index.vue'
 import Observer from '@/components/plp/observer.vue'
 import AccordionContainer from '@/components/_shared/accordion/index.vue'
 import Accordion from '@/components/_shared/accordion/item.vue'
+import FilterSection from '@/components/_shared/filter-section/index.vue'
+import { useShowFilters } from '@/composables/use-accordion/index.vue'
 
 defineProps<PlpProps>()
 
@@ -84,59 +89,70 @@ const emits = defineEmits<{
   (emitName: 'update:merchant-filter', id: number): void
 }>()
 const imageAdd = '/search.png'
+
+// the functionality is the same im just gonna use it cause theres no time:)
+const { toggle, show } = useShowFilters()
 </script>
 <style lang="scss" scoped>
 @import 'assets/styles/colors';
 @import 'assets/styles/variables';
-.plp {
-  width: 100%;
-  flex: 1 1 0;
-  min-width: 0;
-  &__container {
-    margin: 0 auto;
-    padding: $container-padding;
-    max-width: $container-size;
-  }
-}
 .plp-content {
-  position: relative;
+  //position: relative;
+  padding: 20px;
   display: flex;
-  align-items: flex-start;
   justify-content: space-between;
   &-sidebar {
+    position: sticky;
+    display: flex;
+    flex-direction: column;
+    width: 20%;
+    top: 0;
     padding: 0 17px 0 0;
     border-radius: 10px;
     border: 1px solid $secondary;
-    top: 0;
-    z-index: 500;
-    width: 315px;
-    position: sticky;
-    &__divider {
-      display: block;
-      height: 1px;
-      margin: 0px 0 30px 23px;
-      border-left: 18rem solid $light-gray;
+    margin-left: 8px;
+    @media (max-width: 768px) {
+      position: absolute;
+      display: none;
+      width: 80%;
+      height: 100%;
+      top: 0;
+      right: 0;
+      padding-top: 10px;
+      z-index: 100;
     }
+    //&__divider {
+    //  display: block;
+    //  height: 1px;
+    //  margin: 0 0 30px 23px;
+    //  border-left: 18rem solid $light-gray;
+    //  @media (max-width: 768px) {
+    //    position: relative;
+    //    margin: 0 0 30px 360px;
+    //  }
+    //}
     &__title {
       font-weight: 300;
       font-size: $header-font-size;
-      line-height: 3;
+      line-height: 1;
     }
     .search-input {
-      align-self: start;
-      width: 226px;
-      margin-bottom: 8px;
       border-radius: $primary-radius;
+      border: 1px solid $light-gray;
+      position: relative;
+      width: 70%;
+      padding: 4px;
     }
   }
   &__main {
     display: grid;
-    grid-gap: 0px 0;
-    grid-template-columns: repeat(4, 2fr);
+    flex-grow: 1;
+    grid-template-columns: repeat(4, 1fr);
     align-items: stretch;
     border: 1px solid $light-gray;
     border-radius: 10px;
     margin: 0 0 0 22px;
+    width: 80%;
     .item {
       display: flex;
       &:nth-of-type(4n + 1),
@@ -149,6 +165,20 @@ const imageAdd = '/search.png'
       }
     }
   }
+}
+.filter-btn {
+  display: none;
+  @media (max-width: 768px) {
+    display: block;
+    position: relative;
+    margin-right: 20px;
+    z-index: 200;
+  }
+}
+.collapse {
+  display: block;
+  width: 65%;
+  height: 100%;
 }
 .accordion {
   color: $black;
@@ -170,11 +200,9 @@ const imageAdd = '/search.png'
 .checkbox-container::-webkit-scrollbar {
   width: 1px;
 }
-
 .checkbox-container::-webkit-scrollbar-track {
   -webkit-box-shadow: inset 0 0 6px $light-gray;
 }
-
 .checkbox-container::-webkit-scrollbar-thumb {
   -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5);
 }

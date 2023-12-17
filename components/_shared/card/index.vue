@@ -31,17 +31,13 @@ const toToman = (price: string | number): number => {
   position: relative;
   display: flex;
   flex-direction: column;
-  width: 200px;
   padding: 15px;
   align-items: stretch;
   &-media {
     position: relative;
-    padding-bottom: 70%;
-    margin-bottom: 2rem;
     &__image {
       width: 100%;
       height: 100%;
-      position: absolute;
       object-fit: contain;
     }
   }

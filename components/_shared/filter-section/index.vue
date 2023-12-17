@@ -1,9 +1,9 @@
 <template>
-  <div>
-    <div>
-      <h2>{{ title }}</h2>
+  <div class="filter-container">
+    <div class="filter-container__heading">
+      <h2 class="filter-container__title">{{ title }}</h2>
     </div>
-    <div>
+    <div class="filter-container__content">
       <slot name="head" />
       <slot name="body" />
     </div>
@@ -16,13 +16,13 @@ defineProps<{
 </script>
 <style lang="scss" scoped>
 @import 'assets/styles/variables';
-//.filter-container {
-//  &__heading {
-//    margin-bottom: 6px;
-//  }
-//  &__title {
-//    font-weight: 300;
-//    font-size: $header-font-size;
-//  }
-//}
+.filter-container {
+  &__heading {
+    margin-bottom: 6px;
+  }
+  &__title {
+    font-weight: 300;
+    font-size: $header-font-size;
+  }
+}
 </style>

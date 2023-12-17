@@ -19,7 +19,7 @@ import { useFilter } from '~/composables/useFilter'
 definePageMeta({
   name: 'products',
   path: '/products',
-  alias: ['/products/:id/:slug/', '/products/:id/:slug/:Ids', '/products/:Ids'],
+  alias: ['/products/:id/:slug/'],
 })
 
 const route = useRoute()
@@ -72,3 +72,4 @@ const handleMerchantFilter = (id: number) => {
   // })
 }
 </script>
+<style lang="scss" scoped></style>
