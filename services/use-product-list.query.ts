@@ -1,16 +1,32 @@
-export function useProductListQuery(page: any, api: any) {
+import type { Filter } from '~/composables/useFilter'
+import type { Product } from '~/models/product'
+
+interface ProductQueryDto {
+  data: Product[]
+  totalItems: number
+}
+
+export function useProductListQuery(query: Filter) {
   return useAsyncData(
     'products',
-    async (app) => {
-      const { data, totalItems } = await $fetch(api.value, {
-        method: 'POST',
-        params: {
-          size: 10,
-          page: page.value,
+    async (app): Promise<ProductQueryDto> => {
+      const { data, totalItems } = await $fetch<ProductQueryDto>(
+        `https://interview-api.azkiloan.com/api/v1/products${
+          query.categoryId ? `/${query.categoryId}` : ''
+        }`,
+        {
+          method: 'POST',
+          params: {
+            ...query,
+          },
+          body: {
+            merchantIds: query.merchantIds,
+          },
         },
-      })
+      )
+
       const previousData = app?._asyncData?.products?.data.value?.data || []
-      if (page.value === 1 && previousData.length !== 0) {
+      if (query.page === 1 && previousData.length !== 0) {
         return {
           data: [...data],
           totalItems,
@@ -22,7 +38,7 @@ export function useProductListQuery(page: any, api: any) {
         }
     },
     {
-      watch: [page],
+      watch: [query],
     },
   )
 }

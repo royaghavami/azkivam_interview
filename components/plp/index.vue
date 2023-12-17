@@ -1,65 +1,74 @@
 <template>
-  <div class="plp-content">
-    <Container class="plp-content-sidebar">
-      <h2 class="plp-content-sidebar__title">
-        فیلتر ها
-        <br />
-        دسته بندی
-      </h2>
-      <AccordionContainer>
-        <Accordion
-          v-for="(category, index) in categories"
-          :key="index"
-          :title="category.name"
-          :has-children="true"
-          :link="`/products/${category.id}/${category.slug}`"
-          class="accordion"
-        >
-          <template #children>
+  <main class="plp">
+    <div class="plp__container">
+      <div class="plp-content">
+        <Container class="plp-content-sidebar">
+          <h2 class="plp-content-sidebar__title">
+            فیلتر ها
+            <br />
+            دسته بندی
+          </h2>
+          <AccordionContainer>
             <Accordion
-              v-for="(child, i) in category.children"
-              :key="i"
-              :title="child.name"
-              :link="`/products/${child.id}/${child.slug}`"
-              class="accordion-wrapper__child"
+              v-for="(category, index) in categories"
+              :key="index"
+              :title="category.name"
+              :has-children="true"
+              :link="`/products/${category.id}/${category.slug}`"
+              class="accordion"
+            >
+              <template #children>
+                <Accordion
+                  v-for="(child, i) in category.children"
+                  :key="i"
+                  :title="child.name"
+                  :link="`/products/${child.id}/${child.slug}`"
+                  :has-children="false"
+                  class="accordion-wrapper__child"
+                />
+              </template>
+            </Accordion>
+          </AccordionContainer>
+          <span class="plp-content-sidebar__divider" />
+          <div class="search-input">
+            <SearchInput
+              placeholder="جستجوی فروشگاه"
+              type="text"
+              :icon="imageAdd"
+              :has-icon="true"
+              :value="''"
             />
-          </template>
-        </Accordion>
-      </AccordionContainer>
-      <span class="plp-content-sidebar__divider" />
-      <div class="search-input">
-        <SearchInput
-          placeholder="جستجوی فروشگاه"
-          type="text"
-          :icon="imageAdd"
-          :has-icon="true"
-        />
+          </div>
+          <div class="checkbox-container">
+            <Checkbox
+              v-for="merchant in merchants"
+              :id="merchant.id"
+              :key="merchant.id"
+              :label="merchant.name"
+              :val="merchant.enabled"
+              @click="emits('update:merchant-filter', merchant.id)"
+            />
+          </div>
+        </Container>
+        <section class="plp-content__main">
+          <div v-for="item in items" :key="item.id" class="item">
+            <Card
+              :id="item.id"
+              :name="item.name"
+              :image-url="item.imageUrl"
+              :price="item.minPrice"
+            />
+          </div>
+          <ClientOnly>
+            <Observer @intersect="emits('update:intersect')" />
+          </ClientOnly>
+        </section>
       </div>
-      <div class="checkbox-container">
-        <Checkbox
-          v-for="merchant in merchants"
-          :key="merchant.id"
-          :label="merchant.name"
-          :html-id="merchant.id"
-        />
-      </div>
-    </Container>
-    <section class="plp-content__main">
-      <div v-for="item in items" :key="item.id" class="item">
-        <Card
-          :id="item.id"
-          :name="item.name"
-          :image-url="item.imageUrl"
-          :price="item.minPrice"
-        />
-      </div>
-      <ClientOnly>
-        <Observer @intersect="emits('update:intersect')" />
-      </ClientOnly>
-    </section>
-  </div>
+    </div>
+  </main>
 </template>
 <script lang="ts" setup>
+import type { PlpProps } from './plp'
 import Checkbox from '@/components/_shared/input/checkbox/index.vue'
 import Card from '@/components/_shared/card/index.vue'
 import Container from '@/components/_shared/container/index.vue'
@@ -68,20 +77,27 @@ import Observer from '@/components/plp/observer.vue'
 import AccordionContainer from '@/components/_shared/accordion/index.vue'
 import Accordion from '@/components/_shared/accordion/item.vue'
 
-defineProps<{
-  items: any
-  categories: any
-  merchants: any
-}>()
+defineProps<PlpProps>()
 
 const emits = defineEmits<{
   (emitName: 'update:intersect'): void
+  (emitName: 'update:merchant-filter', id: number): void
 }>()
 const imageAdd = '/search.png'
 </script>
 <style lang="scss" scoped>
 @import 'assets/styles/colors';
 @import 'assets/styles/variables';
+.plp {
+  width: 100%;
+  flex: 1 1 0;
+  min-width: 0;
+  &__container {
+    margin: 0 auto;
+    padding: $container-padding;
+    max-width: $container-size;
+  }
+}
 .plp-content {
   position: relative;
   display: flex;

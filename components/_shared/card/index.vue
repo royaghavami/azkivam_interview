@@ -6,7 +6,7 @@
     <div class="card-content">
       <h2 class="card-content__title">{{ name }}</h2>
       <span class="card-content__description"
-        >شروع قیمت از
+      >شروع قیمت از
         <br />
         <span class="bold">{{ addPriceSeparator(toToman(price)) }} تومان</span>
       </span>

@@ -1,10 +1,10 @@
 <template>
   <label class="j-checkbox">
     <input
-      v-model="localValue"
       :value="val"
-      v-bind="inputAttrs"
       class="j-checkbox__input"
+      type="checkbox"
+      @click="emits('click')"
     />
     <span class="j-checkbox-box">
       <span class="j-checkbox-box__checkbox" />
@@ -16,24 +16,16 @@
 </template>
 
 <script setup lang="ts">
-// import {computed} from "vue";
-import type { Checkbox } from './checkbox'
-const props = defineProps<Checkbox>()
-const inputAttrs = computed(function () {
-  return {
-    checked: props.checked,
-    id: props.htmlId,
-    type: 'checkbox',
-  }
-})
-const localValue = computed({
-  get() {
-    return props.value
-  },
-  set(newVal) {
-    // this.$emit('input', newVal)
-  },
-})
+const props = defineProps<{
+  id: string | number
+  label: string
+  val: string | number | null
+}>()
+const emits = defineEmits<{
+  (emitName: 'click'): void
+}>()
+// const inputAttrs = computed(() => props.id)
+// const localValue = computed(() => props.val)
 </script>
 
 <style lang="scss" scoped>

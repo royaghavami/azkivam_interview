@@ -21,17 +21,11 @@
 </template>
 
 <script setup lang="ts">
-// import {computed} from "vue";
-import type { Input } from './input'
-defineProps<Input>()
-// const eventListeners = computed(function () {
-//   return {
-//     ...this.$listeners,
-//     input: ({ target: { value } }) => {
-//       this.$emit('input', value)
-//     },
-//   }
-// })
+defineProps<{
+  icon: string
+  hasIcon: boolean
+  value: string | number
+}>()
 </script>
 
 <style lang="scss" scoped>

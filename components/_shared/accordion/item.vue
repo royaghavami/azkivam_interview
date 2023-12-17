@@ -5,7 +5,7 @@
         :class="{ isChild: !hasChildren }"
         class="accordion-panel__title"
         :to="link"
-        >{{ title }}</NuxtLink
+      >{{ title }}</NuxtLink
       >
       <img
         v-if="hasChildren"
